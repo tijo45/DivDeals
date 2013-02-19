@@ -11,8 +11,12 @@
 @interface CustomCell : UITableViewCell
 {
     UIButton *_disclosureButton;
+    UIImageView *bgImage;
+    UIImageView *arrowImage;
 }
 
+@property (nonatomic, retain) UIImageView *arrowImage;
+@property (nonatomic, retain) UIImageView *bgImage;
 @property (nonatomic, retain) UILabel *myLabel;
 
 @end

@@ -23,6 +23,12 @@
 	NSMutableArray          *CategouryDataArray;
     
     IBOutlet UITableView *dealTable;
+    
+    UIActivityIndicatorView *spinner;
+    
+    NSString *nextURL;
+    
+    BOOL isFirstTime;
 }
 
 @property (nonatomic , retain) id<PopedViewControllerDelegate>dealDelegate;

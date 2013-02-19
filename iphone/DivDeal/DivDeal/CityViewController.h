@@ -18,11 +18,25 @@
 {
     
     id<CityViewControllerDelegate>CityDelegate;
-    NSMutableArray *cityArray;
+    NSMutableArray *cityArray, *businessArray, *locationArray;
     
     IBOutlet UITableView *table;
+    
+    IBOutlet UISegmentedControl *Filtersegment;
+    IBOutlet UIActivityIndicatorView *Spinner;
+    
+    BOOL IsBusniss;
+    
+    NSIndexPath *selectdIndex;
+    
+    IBOutlet UIActivityIndicatorView *spinner;
+    NSString *nextURL;
+    BOOL isFirstTime;
 }
 
 @property(nonatomic , retain)id<CityViewControllerDelegate>CityDelegate;
+@property(nonatomic , retain)IBOutlet UISegmentedControl *Filtersegment;
+
+-(IBAction)segmentValueChange:(id)sender;
 
 @end

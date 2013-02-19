@@ -10,7 +10,7 @@
 
 @implementation MainCell
 
-@synthesize DealName, rateLbl, DisLbl, DaysLbl,dealImage;
+@synthesize DealName, rateLbl, DisLbl, DaysLbl,dealImage, bgImage;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

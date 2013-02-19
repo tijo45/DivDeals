@@ -11,16 +11,27 @@
 #import "CityViewController.h"
 #import "PopedViewController.h"
 
+#import "FBController.h"
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate, PPRevealSideViewControllerDelegate>
 {
     PPRevealSideViewController *revealSideViewController;
     
-    CityViewController *c;
+    CityViewController  *c;
     PopedViewController *popVC;
+    
+    FBController        *fbController;
+    
+    NSMutableDictionary *MaininfoDict;
 }
+@property (nonatomic , retain)FBController *fbController;
+@property (nonatomic , retain)NSMutableDictionary *MaininfoDict;
+
+-(BOOL)connected;
 -(void)setUpView;
 -(void)setUpDealDescriptionView;
 -(void)LoadMainView;
+-(void)Loadcity;
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) PPRevealSideViewController *revealSideViewController;
 @end

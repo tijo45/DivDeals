@@ -10,7 +10,7 @@
 #import "AppDelegate.h"
 @implementation CustomCell
 @synthesize myLabel = _myLabel;
-
+@synthesize bgImage,arrowImage;
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -23,7 +23,16 @@
         _myLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _myLabel.backgroundColor = [UIColor clearColor];
         _myLabel.numberOfLines = 2;
+        _myLabel.textColor = [UIColor whiteColor];
         
+        bgImage = [[UIImageView alloc]initWithFrame:CGRectZero];
+        bgImage.image = [UIImage imageNamed:@"blackstrip.png"];
+        
+        arrowImage = [[UIImageView alloc]initWithFrame:CGRectZero];
+        arrowImage.image = [UIImage imageNamed:@"down_arrow.png"];
+
+        [self.contentView addSubview:bgImage];
+        //[self.contentView addSubview:arrowImage];
         [self.contentView addSubview:_myLabel];
         
     }
@@ -46,7 +55,8 @@
     
     
     _myLabel.frame = CGRectMake(10, 0, 300, 24);
-    
+    bgImage.frame = CGRectMake(0, 0, 320, 30);
+    arrowImage.frame = CGRectMake(290, 7, 10, 15);
     
     if([[NSUserDefaults standardUserDefaults]objectForKey:@"city"])
         _myLabel.textAlignment = UITextAlignmentRight;

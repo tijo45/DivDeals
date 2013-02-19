@@ -12,38 +12,82 @@
 #import "TableViewController.h"
 #import "PopedViewController.h"
 
+#import "Reachability.h"
 @implementation AppDelegate
 
 @synthesize window = _window;
 @synthesize revealSideViewController = _revealSideViewController;
+
+
+@synthesize fbController, MaininfoDict;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = ([[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]]);
     
     
+    if (![[NSUserDefaults standardUserDefaults]objectForKey:@"FB_ID"]) {
+        [[NSUserDefaults standardUserDefaults]setObject:@"##NOUSER##" forKey:@"FB_ID"];
+    }
+    
+    
     if([[NSUserDefaults standardUserDefaults]objectForKey:@"city"])
     {
-        [self LoadDealView];
+        if (![self connected])
+        {
+            UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"Error!" message:@"No Network please try agan leter." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [al show];
+        }
+        else
+            [self LoadDealView];
     }
     else
     {
-        c = [[CityViewController alloc] initWithNibName:@"CityViewController" bundle:nil];
-        c.CityDelegate = nil;
-        c.view.frame = CGRectMake(0, 20, 320, 460);
-        [self.window addSubview:c.view];
-    }
+        if (![self connected])
+        {
+            UIAlertView *al = [[UIAlertView alloc]initWithTitle:@"Error!" message:@"No Network please try agan leter." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [al show];
+        }
+        else
+        {
+            [self Loadcity];
+        }
+
+     }
     
  
-    
-//    PP_RELEASE(main);
-//    PP_RELEASE(nav);
-    
+       
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
 }
 
+-(BOOL)connected
+{
+	//return NO; // force for offline testing
+	Reachability *hostReach = [Reachability reachabilityForInternetConnection];
+	NetworkStatus netStatus = [hostReach currentReachabilityStatus];
+	return !(netStatus == NotReachable);
+}
+
+-(void)Loadcity
+{
+    
+    if (popVC) {
+        [UIView animateWithDuration:0.3 animations:^(void){
+            popVC.view.alpha = 0;
+        }completion:^(BOOL finished){
+            [popVC.view removeFromSuperview];
+        }];
+
+    }
+    
+    c = [[CityViewController alloc] initWithNibName:@"CityViewController" bundle:nil];
+    c.CityDelegate = nil;
+    c.view.frame = CGRectMake(0, 20, 320, 460);
+    [self.window addSubview:c.view];
+
+}
 
 -(void)setUpView
 {
@@ -77,7 +121,6 @@
     _revealSideViewController = [[PPRevealSideViewController alloc] initWithRootViewController:nav];
     
     _revealSideViewController.delegate = self;
-   // _revealSideViewController.view.alpha = 0;
     self.window.rootViewController = _revealSideViewController;
 
     
@@ -126,9 +169,12 @@
 
 - (PPRevealSideDirection)pprevealSideViewController:(PPRevealSideViewController*)controller directionsAllowedForPanningOnView:(UIView*)view {
     
-    if ([view isKindOfClass:NSClassFromString(@"UIWebBrowserView")]) return PPRevealSideDirectionLeft | PPRevealSideDirectionRight;
+    if ([view isKindOfClass:NSClassFromString(@"UIWebBrowserView")])
+        return PPRevealSideDirectionLeft | PPRevealSideDirectionRight;
     
-    return PPRevealSideDirectionLeft | PPRevealSideDirectionRight | PPRevealSideDirectionTop | PPRevealSideDirectionBottom;
+    //return PPRevealSideDirectionLeft | PPRevealSideDirectionRight | PPRevealSideDirectionTop | PPRevealSideDirectionBottom;
+    return PPRevealSideDirectionLeft | PPRevealSideDirectionRight;
+
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -151,6 +197,34 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [self performSelector:@selector(autoLogin) withObject:nil afterDelay:1.5];
+}
+-(void)autoLogin
+{
+    
+    if (self.fbController==nil)
+    {
+        self.fbController = [[FBController alloc] init];
+        self.fbController.isTryingAutoLogin = NO;
+        
+        
+        if (![[[NSUserDefaults standardUserDefaults]objectForKey:@"FB_ID"] isEqualToString:@"##NOUSER##"])
+        {
+            [self.fbController autoLoginIntoFB];
+        }
+        
+    }
+    
+}
+
+
+#pragma mark - Application URL Delegate
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+    return [self.fbController.facebook handleOpenURL:url];
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [self.fbController.facebook handleOpenURL:url];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

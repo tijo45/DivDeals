@@ -10,7 +10,7 @@
 
 @interface MainCell : UITableViewCell
 {
-    IBOutlet UIImageView *dealImage;
+    IBOutlet UIImageView *dealImage, *bgImage;
     IBOutlet UILabel *DealName;
     IBOutlet UILabel *rateLbl;
     IBOutlet UILabel *DisLbl;
@@ -20,6 +20,6 @@
 
 @property(nonatomic , retain)IBOutlet UILabel *DealName, *rateLbl, *DisLbl, *DaysLbl;
 
-@property (nonatomic ,retain)IBOutlet UIImageView *dealImage;
+@property (nonatomic ,retain)IBOutlet UIImageView *dealImage, *bgImage;
 
 @end

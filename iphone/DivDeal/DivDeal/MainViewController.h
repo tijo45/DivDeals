@@ -9,9 +9,16 @@
 #import <UIKit/UIKit.h>
 #import "PopedViewController.h"
 #import "CityViewController.h"
+#import <MessageUI/MessageUI.h>
+#import "BrowserViewController_ipad.h"
 
+@class AppDelegate;
 @interface MainViewController : UIViewController
 {
+    AppDelegate *appDelegate;
+ 
+    BrowserViewController_ipad *browerVC;
+    
     CityViewController *c;
     PopedViewController *Poped;
     BOOL _animated;
@@ -30,8 +37,13 @@
     
     IBOutlet UIImageView *ratingImage;
  
+    IBOutlet UIView *loadingView;
 
 }
+
+-(IBAction)twitterPressed:(id)sender;
+-(IBAction)FBPressed:(id)sender;
+-(IBAction)MailPressed:(id)sender;
 
 - (IBAction) showLeft;
 - (IBAction)showRight;
